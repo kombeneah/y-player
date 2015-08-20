@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+
+  "name": "Background Youtube Player",
+  "description": "This extension plays Youtube's top match as you type, in the background.",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Background Youtube Player"
+  },
+  
+  "background": {
+    "scripts": ["eventPage.js"],
+    "persistent": true
+  },
+  
+  "permissions": [
+    "activeTab",
+    "https://ajax.googleapis.com/"
+  ]
+}
