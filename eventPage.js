@@ -1,5 +1,5 @@
-var tabId;
-var opened = false;
+//var tabId;
+//var opened = false;
 
 function getHostUrl() {
   return "http://ytinstant.com/#";
@@ -10,22 +10,30 @@ function getStreamUrl(input) {
 }
 
 function postUpdate(input) {
-  console.log("Input2 = " + input);
+  
   var streamUrl = getStreamUrl(input);
-  if (opened) {
-    console.log("Tab already open with ID = " + tabId);
-    chrome.tabs.update(tabId, {url: streamUrl});
-  } else {
-    chrome.tabs.create({ url: streamUrl, selected: false }, function(tab){ 
-			tabId = tab.id;
-      opened = true;
-		});
-    console.log("Tab opened with ID = " + tabId);
-  }
+  var isOpen = false;
+  chrome.storage.local.get(null, function (result) {
+    isOpen = result.ytTabOpened;
+    if (isOpen === true) {
+      chrome.tabs.update(result.ytTabId, {url: streamUrl});
+    } else {
+      chrome.tabs.create({ url: streamUrl, selected: false }, function(tab) {    
+		    chrome.storage.local.set({'ytTabId': tab.id});
+        chrome.storage.local.set({'ytTabOpened': true});
+		  });
+ 
+    }
+  });
 }
 
-chrome.tabs.onRemoved.addListener(function(id){
-  if(id==tabId){
-    opened = false;
-	}
+chrome.tabs.onRemoved.addListener(function (id) {
+  
+  chrome.storage.local.get("ytTabId", function (result) {
+    if (id == result.ytTabId) {
+      chrome.storage.local.set({'ytTabId': null});
+      chrome.storage.local.set({'ytTabOpened': false});
+    }
+  });
+  
 });

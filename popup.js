@@ -15,6 +15,7 @@ function updateBackgroundMusic(input) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  
   var searchBox = document.getElementById('searchBox');
   searchBox.blur();
   
@@ -38,8 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
       case DELETE_KEYCODE:
         break;
       default:
-        input = document.getElementById('searchBox').value;
-        updateBackgroundMusic();
+        input = "" + document.getElementById("searchBox").value;
+        updateBackgroundMusic(input);
     }
   };
 });
